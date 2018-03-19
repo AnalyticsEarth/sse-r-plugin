@@ -70,12 +70,19 @@ namespace SSEtoRserve
                     };
 
                     server.Start();
-                    Console.WriteLine("Press any key to stop SSEtoRserve...");
+                    //Console.WriteLine("Press any key to stop SSEtoRserve...");
                     logger.Info($"gRPC listening on port {grpcPort}");
-                    Console.ReadKey();
-                    logger.Info("Shutting down SSEtoRserve... Bye!");
-                    server?.ShutdownAsync().Wait();
-                    rServeEvaluator?.Dispose();
+                    //Console.ReadKey();
+                    try {
+                      while(true) {
+                        Thread.Sleep(10000);
+                      }
+                    } finally {
+                      logger.Info("Shutting down SSEtoRserve... Bye!");
+                      server?.ShutdownAsync().Wait();
+                      rServeEvaluator?.Dispose();
+                    }
+
                 }
             }
             catch (Exception ex)

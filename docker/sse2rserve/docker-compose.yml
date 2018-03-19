@@ -1,7 +1,0 @@
-version: '3'
-services:
-  sse2rserve:
-    build: .
-    image: analyticsearth/sse2rserve
-    ports:
-      - "50051:50051/tcp"
