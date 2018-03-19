@@ -3,6 +3,7 @@ using Qlik.Sse;
 using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Threading;
 using NLog;
 using System.IO;
 
