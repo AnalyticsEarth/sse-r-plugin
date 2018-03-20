@@ -32,7 +32,7 @@ RUN nuget restore \
  && chmod 755 ServerSideExtension/generate_SSE_Stubs_from_proto.sh
 
 # Build application
-RUN msbuild ServerSideExtension.sln
+RUN msbuild ServerSideExtension.sln /p:Configuration=Linux
 
 # Cleanup
 RUN rm -rf ServerSideExtension packages
@@ -69,15 +69,15 @@ RUN { \
     echo '        </SSEtoRserve.Properties.Settings>';\
     echo '    </applicationSettings>';\
     echo '</configuration>';\
-} | tee /sse-r-plugin/csharp/SSEtoRserve/bin/Debug/SSEtoRserve.exe.tmpl
+} | tee /sse-r-plugin/csharp/SSEtoRserve/bin/Linux/SSEtoRserve.exe.tmpl
 
 # Create start script
 RUN { \
     echo "#!/bin/sh";\
     echo "export IPADDR=\`getent hosts \$RHOST | awk '{ print \$1 ; exit }'\`";\
     echo "export IPADDR=\${IPADDR:-127.0.0.1}";\
-    echo "sed 's/\$rServeHost/'\$IPADDR'/' /sse-r-plugin/csharp/SSEtoRserve/bin/Debug/SSEtoRserve.exe.tmpl > /sse-r-plugin/csharp/SSEtoRserve/bin/Debug/SSEtoRserve.exe.config";\
-    echo "/usr/bin/mono /sse-r-plugin/csharp/SSEtoRserve/bin/Debug/SSEtoRserve.exe";\
+    echo "sed 's/\$rServeHost/'\$IPADDR'/' /sse-r-plugin/csharp/SSEtoRserve/bin/Linux/SSEtoRserve.exe.tmpl > /sse-r-plugin/csharp/SSEtoRserve/bin/Linux/SSEtoRserve.exe.config";\
+    echo "/usr/bin/mono /sse-r-plugin/csharp/SSEtoRserve/bin/Linux/SSEtoRserve.exe";\
 } | tee /sse-r-plugin/csharp/start.sh
 RUN chmod 755 /sse-r-plugin/csharp/start.sh
 
