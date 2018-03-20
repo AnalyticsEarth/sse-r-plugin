@@ -84,11 +84,9 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PreBuildEvent>if $(ConfigurationName) == Linux  (
-"$(ProjectDir)generate_SSE_Stubs_from_proto.sh" "$(ProjectDir)"
-) ELSE (
+    <PreBuildEvent>:; "$(ProjectDir)generate_SSE_Stubs_from_proto.sh" "$(ProjectDir)"; exit $?
  "$(ProjectDir)generate_SSE_Stubs_from_proto.bat" "$(ProjectDir)"
-)</PreBuildEvent>
+  </PreBuildEvent>
   </PropertyGroup>
   <Import Project="..\packages\Grpc.Core.1.7.3\build\net45\Grpc.Core.targets" Condition="Exists('..\packages\Grpc.Core.1.7.3\build\net45\Grpc.Core.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
