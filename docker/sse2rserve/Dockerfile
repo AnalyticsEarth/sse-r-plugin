@@ -1,5 +1,7 @@
 FROM mono
 
+ENV RHOST="rserve"
+
 MAINTAINER "AnalyticsEarth" bbb@qlik.com
 
 # Details
@@ -39,11 +41,14 @@ RUN rm -rf ServerSideExtension packages
 EXPOSE ${PORT:-50051}
 
 # Create configuration file for SSEtoRserve
-RUN cp -rf /sse-r-plugin/docker/sse2rserve/sse2rserve.config /sse-r-plugin/csharp/SSEtoRserve/bin/Linux/SSEtoRserve.exe.config
+RUN cp -rf /sse-r-plugin/docker/sse2rserve/sse2rserve.config /sse-r-plugin/csharp/SSEtoRserve/bin/Linux/SSEtoRserve.exe.tmpl
 
 # Create start script
 RUN { \
     echo "#!/bin/sh";\
+    echo "export IPADDR=\`getent hosts \$RHOST | awk '{ print \$1 ; exit }'\`";\
+    echo "export IPADDR=\${IPADDR:-127.0.0.1}";\
+echo "sed 's/\$rServeHost/'\$IPADDR'/' /sse-r-plugin/csharp/SSEtoRserve/bin/Linux/SSEtoRserve.exe.tmpl > /sse-r-plugin/csharp/SSEtoRserve/bin/Linux/SSEtoRserve.exe.config";\
     echo "/usr/bin/mono /sse-r-plugin/csharp/SSEtoRserve/bin/Linux/SSEtoRserve.exe";\
 } | tee /sse-r-plugin/csharp/start.sh
 RUN chmod 755 /sse-r-plugin/csharp/start.sh
