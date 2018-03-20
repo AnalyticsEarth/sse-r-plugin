@@ -39,7 +39,7 @@ RUN rm -rf ServerSideExtension packages
 EXPOSE ${PORT:-50051}
 
 # Create configuration file for SSEtoRserve
-RUN cp -rf /docker/sse2rserve/sse2rserve.config /sse-r-plugin/csharp/SSEtoRserve/bin/Linux/SSEtoRserve.exe.config
+RUN cp -rf sse-r-plugin/docker/sse2rserve/sse2rserve.config /sse-r-plugin/csharp/SSEtoRserve/bin/Linux/SSEtoRserve.exe.config
 
 # Create start script
 RUN { \
