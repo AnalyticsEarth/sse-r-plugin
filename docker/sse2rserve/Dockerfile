@@ -1,7 +1,5 @@
 FROM mono
 
-ENV RHOST="rserve"
-
 MAINTAINER "AnalyticsEarth" bbb@qlik.com
 
 # Details
@@ -41,42 +39,11 @@ RUN rm -rf ServerSideExtension packages
 EXPOSE ${PORT:-50051}
 
 # Create configuration file for SSEtoRserve
-RUN { \
-    echo '<?xml version="1.0" encoding="utf-8" ?>';\
-    echo '  <configuration>';\
-    echo '    <configSections>';\
-    echo '        <sectionGroup name="applicationSettings" type="System.Configuration.ApplicationSettingsGroup, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" >';\
-    echo '            <section name="SSEtoRserve.Properties.Settings" type="System.Configuration.ClientSettingsSection, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" requirePermission="false" />';\
-    echo '        </sectionGroup>';\
-    echo '    </configSections>';\
-    echo '    <startup>';\
-    echo '        <supportedRuntime version="v4.0" sku=".NETFramework,Version=v4.5.2" />';\
-    echo '    </startup>';\
-    echo '    <applicationSettings>';\
-    echo '        <SSEtoRserve.Properties.Settings>';\
-    echo '            <setting name="grpcPort" serializeAs="String">';\
-    echo '                <value>50051</value>';\
-    echo '            </setting>';\
-    echo '            <setting name="rserveHost" serializeAs="String">';\
-    echo '                <value>$rServeHost</value>';\
-    echo '            </setting>';\
-    echo '            <setting name="rservePort" serializeAs="String">';\
-    echo '                <value>6311</value>';\
-    echo '            </setting>';\
-    echo '            <setting name="grpcHost" serializeAs="String">';\
-    echo '                <value>0.0.0.0</value>   <!-- Set to 0.0.0.0 if you want it reachable from the outside world -->';\
-    echo '            </setting>';\
-    echo '        </SSEtoRserve.Properties.Settings>';\
-    echo '    </applicationSettings>';\
-    echo '</configuration>';\
-} | tee /sse-r-plugin/csharp/SSEtoRserve/bin/Linux/SSEtoRserve.exe.tmpl
+RUN cp /docker/sse2rserve/sse2rserve.config /sse-r-plugin/csharp/SSEtoRserve/bin/Linux/SSEtoRserve.exe.config
 
 # Create start script
 RUN { \
     echo "#!/bin/sh";\
-    echo "export IPADDR=\`getent hosts \$RHOST | awk '{ print \$1 ; exit }'\`";\
-    echo "export IPADDR=\${IPADDR:-127.0.0.1}";\
-    echo "sed 's/\$rServeHost/'\$IPADDR'/' /sse-r-plugin/csharp/SSEtoRserve/bin/Linux/SSEtoRserve.exe.tmpl > /sse-r-plugin/csharp/SSEtoRserve/bin/Linux/SSEtoRserve.exe.config";\
     echo "/usr/bin/mono /sse-r-plugin/csharp/SSEtoRserve/bin/Linux/SSEtoRserve.exe";\
 } | tee /sse-r-plugin/csharp/start.sh
 RUN chmod 755 /sse-r-plugin/csharp/start.sh
