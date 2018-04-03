@@ -1,14 +1,6 @@
 version: '3'
 services:
-  sse2rserve:
-    build: ./sse2rserve
-    image: analyticsearth/sse2rserve
+  sse2rservecore:
+    image: analyticsearth/sse2rservecore
     ports:
       - "50051:50051/tcp"
-    depends_on:
-      - rserve
-  rserve:
-    build: ./rserve
-    image: analyticsearth/rserve
-    ports:
-      - "6311:6311/tcp"

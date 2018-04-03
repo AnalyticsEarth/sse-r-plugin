@@ -3,10 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27428.2015
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServerSideExtension", "ServerSideExtension\ServerSideExtension.csproj", "{96C630F4-EC73-4FCD-82ED-83473EF0E432}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SSEtoRserve", "SSEtoRserve\SSEtoRserve.csproj", "{F063A698-7542-4C8A-8702-323859CBBBD1}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SSEtoRServeCore", "SSEtoRServeCore\SSEtoRServeCore.csproj", "{0FB9D3EF-E4D5-4B52-8C12-55E2A7DF7263}"
 EndProject
 Global
