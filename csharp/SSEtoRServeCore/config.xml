@@ -1,0 +1,22 @@
+<config>
+  <grpcPort>50051</grpcPort>
+  <!-- grpcHost: Set to 0.0.0.0 to make it reachable from the outside world -->
+  <grpcHost>localhost</grpcHost>
+  <rserveHost>127.0.0.1</rserveHost>
+  <rservePort>6311</rservePort>
+  <rserveUser></rserveUser>
+  <rservePassword></rservePassword>
+  <!-- certificateFolderFullPath: Set to i.e. C:\sse_qliktest_server_certs to enable mutual authentication (server and client auth) between this plugin and Qlik -->
+  <certificateFolderFullPath></certificateFolderFullPath>
+  <!-- rProcessPathToStart: Set to i.e. C:\Program Files\Microsoft\R Open\bin\x64\Rterm.exe if SSEtoRserve should start an R process as well -->
+  <rProcessPathToStart-Win>C:\R\R-3.4.3\bin\x64\R.exe</rProcessPathToStart-Win>
+  <rProcessPathToStart-Linux>R</rProcessPathToStart-Linux>
+  <!-- rProcessCommandLineArgs: Set command line arguments for the R process to affect the process configuration -->
+  <rProcessCommandLineArgs>CMD RServe</rProcessCommandLineArgs>
+  <!-- rserveInitScript: Set to i.e. library(TTR); library(pastecs); if you want SSEtoRserve to send initialization R scripts directly after a connection is created to Rserve. Set it to setwd('C:/Users/myUser/Documents/R/Myscripts'); source("sum.R"); getwd(); to set a working directory and load your own R scripts. -->
+  <rserveInitScript></rserveInitScript>
+  <!-- allowScript: Set to False to disable execution of arbitrary scripts sent to the plugin (for security concerns) -->
+  <allowScript>True</allowScript>
+  <!-- functionDefinitionsFile: Set to i.e. .\FuncDefs.json to add your own defined SSE functions. The file contains the description of the functions. -->
+  <functionDefinitionsFile></functionDefinitionsFile>
+</config>
