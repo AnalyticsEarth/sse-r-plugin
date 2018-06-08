@@ -48,6 +48,7 @@ namespace SSEtoRserve
                 bool allowScript = Convert.ToBoolean(Configuration["allowScript"]);
                 var functionDefinitionsFile = Convert.ToString(Configuration["functionDefinitionsFile"] ?? "");
 
+
                 var sslCredentials = ServerCredentials.Insecure;
                 var certificateFolderFullPath = Convert.ToString(Configuration["certificateFolderFullPath"] ?? "");
 
