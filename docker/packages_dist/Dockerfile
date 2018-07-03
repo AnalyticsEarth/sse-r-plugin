@@ -1,6 +1,6 @@
 FROM analyticsearth/sse2rservecore
 
-COPY installpackages.r /usr/local/src/scripts
-WORKDIR /usr/local/src/scripts
+COPY installpackages.r /root/src/scripts
+WORKDIR /root/src/scripts
 
 RUN Rscript -e installpackages.r
