@@ -38,4 +38,4 @@ RUN chown sse2rserve:sse2rserve . && \
 EXPOSE 50051/tcp
 EXPOSE 19345/tcp
 USER sse2rserve
-#CMD ./runservices.sh
+CMD ./runservices.sh

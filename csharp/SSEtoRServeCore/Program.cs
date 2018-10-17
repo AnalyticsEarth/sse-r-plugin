@@ -46,7 +46,7 @@ namespace SSEtoRserve
                 
                 var rProcessCommandLineArgs = Convert.ToString(Configuration["rProcessCommandLineArgs"] ?? "");
                 var rserveInitScript = Convert.ToString(Configuration["rserveInitScript"] ?? "");
-                bool allowScript = Convert.ToBoolean(Configuration["allowScript"]);
+                bool allowScript = Convert.ToBoolean(ParameterValue("allowScript","True"));
                 var functionDefinitionsFile = Convert.ToString(Configuration["functionDefinitionsFile"] ?? "");
 
                 
