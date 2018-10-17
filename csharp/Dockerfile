@@ -30,10 +30,9 @@ FROM dotnet_r_base
 RUN groupadd -r sse2rserve \
  && useradd -g sse2rserve --create-home --shell /bin/bash sse2rserve
 
-WORKDIR /user/sse2rserve
+WORKDIR /root/
 COPY --from=builder /root/src/app/sse2rserve/published .
-RUN chmod 777 -R . \
-  && chown -R sse2rserve:sse2rserve /home/sse2rserve
+RUN chmod 777 -R .
 
 EXPOSE 50051/tcp
 EXPOSE 19345/tcp
