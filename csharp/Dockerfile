@@ -38,4 +38,4 @@ RUN chmod +x ./runservices.sh \
 EXPOSE 50051/tcp
 EXPOSE 19345/tcp
 USER sse2rserve
-CMD ./runservices.sh
+#CMD ./runservices.sh
