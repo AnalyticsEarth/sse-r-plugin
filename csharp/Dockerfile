@@ -23,7 +23,7 @@ COPY SSEtoRServeCore/SSEtoRServeCore.csproj SSEtoRServeCore/SSEtoRServeCore.cspr
 RUN dotnet restore SSEtoRServeCore/SSEtoRServeCore.csproj
 
 COPY SSEtoRServeCore/ .
-RUN dotnet publish -c release -o published
+RUN dotnet publish -c release -r linux-x64 -o published
 
 FROM dotnet_r_base
 
