@@ -27,11 +27,13 @@ RUN dotnet publish -c release -o published
 
 FROM dotnet_r_base
 
-RUN useradd --create-home --shell /bin/bash sse2rserve
+RUN groupadd -r sse2rserve \
+ && useradd -g sse2rserve --create-home --shell /bin/bash sse2rserve
 
 WORKDIR /user/sse2rserve
 COPY --from=builder /root/src/app/sse2rserve/published .
-RUN chmod +x ./runservices.sh
+RUN chmod +x ./runservices.sh \
+  && chown -R sse2rserve:sse2rserve /home/sse2rserve
 
 EXPOSE 50051/tcp
 EXPOSE 19345/tcp
