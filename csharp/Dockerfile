@@ -32,7 +32,8 @@ RUN groupadd -r sse2rserve \
 
 WORKDIR /root/
 COPY --from=builder /root/src/app/sse2rserve/published .
-RUN chmod 777 -R .
+RUN chown sse2rserve:sse2rserve . && /
+  chmod +x -R .
 
 EXPOSE 50051/tcp
 EXPOSE 19345/tcp
