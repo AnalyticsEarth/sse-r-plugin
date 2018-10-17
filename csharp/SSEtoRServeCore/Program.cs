@@ -114,6 +114,7 @@ namespace SSEtoRserve
             {
                 logger.Error($"Error in main entry point of SSEtoRserve: {ex}");
                 
+                
             }
         }
 
