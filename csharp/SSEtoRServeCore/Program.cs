@@ -97,7 +97,7 @@ namespace SSEtoRserve
                     //Console.WriteLine("Press any key to stop SSEtoRserve...");
                     logger.Info($"gRPC listening to host {grpcHost}");
                     logger.Info($"gRPC listening on port {grpcPort}");
-                    //Console.ReadKey();
+                    Console.ReadKey();
                     try {
                       while(true) {
                         Thread.Sleep(10000);
@@ -113,8 +113,8 @@ namespace SSEtoRserve
             catch (Exception ex)
             {
                 logger.Error($"Error in main entry point of SSEtoRserve: {ex}");
-                
-                
+                Console.ReadKey();
+
             }
         }
 
