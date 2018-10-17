@@ -113,6 +113,7 @@ namespace SSEtoRserve
             catch (Exception ex)
             {
                 logger.Error($"Error in main entry point of SSEtoRserve: {ex}");
+                Console.WriteLine(ex);
                 Console.ReadKey();
 
             }
@@ -138,6 +139,7 @@ namespace SSEtoRserve
             }catch(Exception e)
             {
                 logger.Error($"Error With Environment Variable: {e}");
+                Console.WriteLine(e);
             }
 
             return val;
