@@ -28,10 +28,10 @@ namespace SSEtoRserve
                 //Convert.ToString(Configuration["grpcHost"] ?? "localhost");
                 var grpcHost = ParameterValue("grpcHost", "localhost");
                 int grpcPort = Convert.ToInt32(ParameterValue("grpcPort", "50051"));
-                var rserveHost = IPAddress.Parse(Configuration["rserveHost"] ?? "127.0.0.1");
-                int rservePort = Convert.ToInt32(Configuration["rservePort"] ?? "6311");
-                var rserveUser = Convert.ToString(Configuration["rserveUser"] ?? "");
-                var rservePassword = Convert.ToString(Configuration["rservePassword"] ?? "");
+                var rserveHost = IPAddress.Parse(ParameterValue("rserveHost", "127.0.0.1"));
+                int rservePort = Convert.ToInt32(ParameterValue("rservePort", "6311"));
+                var rserveUser = Convert.ToString(ParameterValue("rserveUser", ""));
+                var rservePassword = Convert.ToString(ParameterValue("rservePassword",""));
 
                 string rProcessPath;
 
