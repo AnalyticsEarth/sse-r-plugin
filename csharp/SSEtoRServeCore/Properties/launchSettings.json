@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "SSEtoRServeCore": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "sse2rserve_grpcPort": "50051"
+      }
+    }
+  }
+}

@@ -5,8 +5,8 @@ RUN apt-get update \
   && apt-get install -y libssl-dev r-base \
   && apt-get clean
 
-ADD https://www.rforge.net/Rserve/snapshot/Rserve_1.8-5.tar.gz .
-RUN R CMD INSTALL Rserve_1.8-5.tar.gz
+ADD https://www.rforge.net/Rserve/snapshot/Rserve_1.8-6.tar.gz .
+RUN R CMD INSTALL Rserve_1.8-6.tar.gz
 
 FROM microsoft/dotnet:2.1-sdk as builder
 
@@ -27,10 +27,13 @@ RUN dotnet publish -c release -o published
 
 FROM dotnet_r_base
 
-WORKDIR /root/
+RUN useradd --create-home --shell /bin/bash sse2rserve
+
+WORKDIR /user/sse2rserve
 COPY --from=builder /root/src/app/sse2rserve/published .
 RUN chmod +x ./runservices.sh
 
 EXPOSE 50051/tcp
 EXPOSE 19345/tcp
+USER sse2rserve
 CMD ./runservices.sh

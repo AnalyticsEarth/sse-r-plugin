@@ -25,8 +25,9 @@ namespace SSEtoRserve
 
                 Configuration = builder.Build();
 
-                var grpcHost = Convert.ToString(Configuration["grpcHost"] ?? "localhost");
-                int grpcPort = Convert.ToInt32(Configuration["grpcPort"] ?? "50051");
+                //Convert.ToString(Configuration["grpcHost"] ?? "localhost");
+                var grpcHost = ParameterValue("grpcHost", "localhost");
+                int grpcPort = Convert.ToInt32(ParameterValue("grpcPort", "50051"));
                 var rserveHost = IPAddress.Parse(Configuration["rserveHost"] ?? "127.0.0.1");
                 int rservePort = Convert.ToInt32(Configuration["rservePort"] ?? "6311");
                 var rserveUser = Convert.ToString(Configuration["rserveUser"] ?? "");
@@ -48,6 +49,7 @@ namespace SSEtoRserve
                 bool allowScript = Convert.ToBoolean(Configuration["allowScript"]);
                 var functionDefinitionsFile = Convert.ToString(Configuration["functionDefinitionsFile"] ?? "");
 
+                
 
                 var sslCredentials = ServerCredentials.Insecure;
                 var certificateFolderFullPath = Convert.ToString(Configuration["certificateFolderFullPath"] ?? "");
@@ -93,6 +95,7 @@ namespace SSEtoRserve
 
                     server.Start();
                     //Console.WriteLine("Press any key to stop SSEtoRserve...");
+                    logger.Info($"gRPC listening to host {grpcHost}");
                     logger.Info($"gRPC listening on port {grpcPort}");
                     //Console.ReadKey();
                     try {
@@ -110,7 +113,33 @@ namespace SSEtoRserve
             catch (Exception ex)
             {
                 logger.Error($"Error in main entry point of SSEtoRserve: {ex}");
+                
             }
+        }
+
+        public static string ParameterValue(string parameterName, string defaultValue)
+        {
+
+            var val = defaultValue;
+
+            if (Configuration[parameterName] != "")
+            {
+                val = Configuration[parameterName];
+            }
+
+            try
+            {
+                
+                if (Environment.GetEnvironmentVariable("sse2rserve_" + parameterName) != null)
+                {
+                    val = Convert.ToString(Environment.GetEnvironmentVariable("sse2rserve_" + parameterName));
+                }
+            }catch(Exception e)
+            {
+                logger.Error($"Error With Environment Variable: {e}");
+            }
+
+            return val;
         }
     }
 }
