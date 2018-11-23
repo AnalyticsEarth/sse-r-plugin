@@ -52,7 +52,7 @@ namespace SSEtoRserve
                 
 
                 var sslCredentials = ServerCredentials.Insecure;
-                var certificateFolderFullPath = Convert.ToString(Configuration["certificateFolderFullPath"] ?? "");
+                var certificateFolderFullPath = Convert.ToString(ParameterValue("certificateFolderFullPath",""));
 
                 if (certificateFolderFullPath.Length > 3)
                 {
