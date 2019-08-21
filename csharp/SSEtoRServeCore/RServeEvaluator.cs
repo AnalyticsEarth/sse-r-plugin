@@ -384,7 +384,7 @@ namespace SSEtoRserve
                 //await GenerateResult(rResult, responseStream, context, cacheResultInQlik: false);
                 await GenerateResult(rResult, responseStream, context);
                 stopwatch.Stop();
-                logger.Debug($"Took {stopwatch.ElapsedMilliseconds} ms, hashid ({reqHash})");
+                logger.Info($"Took {stopwatch.ElapsedMilliseconds} ms, hashid ({reqHash})");
             }
             catch (Exception e)
             {
