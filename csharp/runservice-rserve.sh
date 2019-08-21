@@ -24,4 +24,5 @@ while sleep 60; do
 #    echo "Rserve has already exited."
 #    exit 1
 #  fi
+ echo "60 Sec Loop"
 done
