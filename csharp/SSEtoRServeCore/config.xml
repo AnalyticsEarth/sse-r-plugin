@@ -6,6 +6,7 @@
   <rservePort>6311</rservePort>
   <rserveUser></rserveUser>
   <rservePassword></rservePassword>
+  <rservePoolLimit>1</rservePoolLimit>
   <!-- certificateFolderFullPath: Set to i.e. C:\sse_qliktest_server_certs to enable mutual authentication (server and client auth) between this plugin and Qlik -->
   <certificateFolderFullPath></certificateFolderFullPath>
   <!-- rProcessPathToStart: Set to i.e. C:\Program Files\Microsoft\R Open\bin\x64\Rterm.exe if SSEtoRserve should start an R process as well -->

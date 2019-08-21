@@ -32,6 +32,7 @@ namespace SSEtoRserve
                 int rservePort = Convert.ToInt32(ParameterValue("rservePort", "6311"));
                 var rserveUser = Convert.ToString(ParameterValue("rserveUser", ""));
                 var rservePassword = Convert.ToString(ParameterValue("rservePassword",""));
+                int rservePoolLimit = Convert.ToInt32(ParameterValue("rservePoolLimit", "1"));
 
                 string rProcessPath;
 
@@ -83,7 +84,7 @@ namespace SSEtoRserve
                 var uri = new Uri($"rserve://{rserveHost}:{rservePort}");
                 if (!String.IsNullOrEmpty(rProcessPath))
                     uri = new Uri(rProcessPath);
-                var parameter = new RserveParameter(uri, rservePort, rserveInitScript, rProcessCommandLineArgs, rserveUser, rservePassword);
+                var parameter = new RserveParameter(uri, rservePort, rserveInitScript, rProcessCommandLineArgs, rserveUser, rservePassword, rservePoolLimit);
 
                 using (var rServeEvaluator = new RServeEvaluator(parameter, allowScript, functionDefinitionsFile))
                 {

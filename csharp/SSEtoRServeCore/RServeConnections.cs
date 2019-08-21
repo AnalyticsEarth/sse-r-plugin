@@ -32,6 +32,7 @@
         public string Scheme { get; private set; }
         public string User { get; private set; }
         public string Password { get; private set; }
+        public int PoolLimit { get; private set; }
         public NetworkCredential Credentials { get; private set; }
 
         public bool RTermPathExits
@@ -44,7 +45,7 @@
         #endregion
 
         #region Constructor
-        public RserveParameter(Uri uri, int rservePort, string initScript = null, string rProcessCommandLineArgs = null, string rserveUser = null, string rservePassword = null)
+        public RserveParameter(Uri uri, int rservePort, string initScript = null, string rProcessCommandLineArgs = null, string rserveUser = null, string rservePassword = null, int rservePoolLimit = 1)
         {
             ConnUri = uri;
             Port = rservePort;
@@ -52,6 +53,7 @@
             RProcessCommandLineArgs = rProcessCommandLineArgs;
             User = rserveUser;
             Password = rservePassword;
+            PoolLimit = rservePoolLimit;
             Init();
         }
         
@@ -113,6 +115,7 @@
         #region Proberties & Variables
         private ConcurrentDictionary<string, RserveConnection> rserveConns;
         private ConcurrentDictionary<string, DateTime> lastUsed;
+        private Random rnd;
         #endregion
 
         #region Constructor
@@ -120,6 +123,7 @@
         {
             rserveConns = new ConcurrentDictionary<string, RserveConnection>();
             lastUsed = new ConcurrentDictionary<string, DateTime>();
+            rnd = new Random();
 
             // TODO: Maybe add a cleanup of old connections that are not used
         }
@@ -128,8 +132,14 @@
         #region Methods
         public RserveConnection GetConnection(RserveParameter rserveParams)
         {
-            var hash = rserveParams.GetHashCode().ToString();
+
+            int poolid = rnd.Next(rserveParams.PoolLimit);
+
+            var hash = $"{rserveParams.GetHashCode().ToString()}-{poolid.ToString()}";
+            Console.WriteLine($"Connecting to pool {poolid} with hash: {hash}");
             RserveConnection conn = null;
+
+
 
             if (rserveConns.ContainsKey(hash))
             {
