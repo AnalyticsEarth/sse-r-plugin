@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Start the first process
-R CMD Rserve --vanilla
+R CMD Rserve --vanilla --RS-enable-remote
 status=$?
 if [ $status -ne 0 ]; then
   echo "Failed to start Rserve: $status"
