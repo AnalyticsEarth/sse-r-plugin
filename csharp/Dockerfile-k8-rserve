@@ -14,4 +14,4 @@ COPY runservice-rserve.sh runservice-rserve.sh
 
 EXPOSE 6311/tcp
 
-ENTRYPOINT runservice-rserve.sh
+ENTRYPOINT ./runservice-rserve.sh
