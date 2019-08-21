@@ -15,14 +15,14 @@ fi
 # Otherwise it loops forever, waking up every 60 seconds
 
 while sleep 60; do
-#  ps aux |grep Rserve |grep -q -v grep
-#  PROCESS_1_STATUS=$?
+  ps aux |grep Rserve |grep -q -v grep
+  PROCESS_1_STATUS=$?
 
   # If the greps above find anything, they exit with 0 status
   # If they are not both 0, then something is wrong
-#  if [ $PROCESS_1_STATUS -ne 0 ]; then
-#    echo "Rserve has already exited."
-#    exit 1
-#  fi
- echo "60 Sec Loop"
+  if [ $PROCESS_1_STATUS -ne 0 ]; then
+    echo "Rserve has already exited."
+    exit 1
+  fi
+ #echo "60 Sec Loop"
 done
