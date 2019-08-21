@@ -4,7 +4,7 @@ LABEL author="AnalyticsEarth"
 
 RUN apt-get update \
   && apt-get upgrade -y \
-  && apt-get install -y libssl-dev \
+  && apt-get install -y libssl-dev procps \
   && apt-get clean
 
 ADD https://www.rforge.net/Rserve/snapshot/Rserve_1.8-6.tar.gz .
