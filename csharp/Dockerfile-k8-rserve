@@ -1,0 +1,10 @@
+FROM r-base
+
+LABEL author="AnalyticsEarth"
+
+ADD https://www.rforge.net/Rserve/snapshot/Rserve_1.8-6.tar.gz .
+RUN R CMD INSTALL Rserve_1.8-6.tar.gz
+
+EXPOSE 6311/tcp
+
+ENTRYPOINT R CMD Rserve --vanilla
