@@ -116,6 +116,7 @@
         private ConcurrentDictionary<string, RserveConnection> rserveConns;
         private ConcurrentDictionary<string, DateTime> lastUsed;
         private Random rnd;
+        static int poolcounter;
         #endregion
 
         #region Constructor
@@ -124,6 +125,7 @@
             rserveConns = new ConcurrentDictionary<string, RserveConnection>();
             lastUsed = new ConcurrentDictionary<string, DateTime>();
             rnd = new Random();
+            poolcounter = 0;
 
             // TODO: Maybe add a cleanup of old connections that are not used
         }
@@ -133,7 +135,10 @@
         public RserveConnection GetConnection(RserveParameter rserveParams)
         {
 
-            int poolid = rnd.Next(rserveParams.PoolLimit);
+            Interlocked.Increment(ref poolcounter);
+            int poolid = poolcounter % (rserveParams.PoolLimit + 1);
+            
+            //int poolid = rnd.Next(rserveParams.PoolLimit);
 
             var hash = $"{rserveParams.GetHashCode().ToString()}-{poolid.ToString()}";
             Console.WriteLine($"Connecting to pool {poolid} with hash: {hash}");
