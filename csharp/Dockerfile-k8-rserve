@@ -14,8 +14,8 @@ COPY runservice-rserve.sh runservice-rserve.sh
 RUN groupadd -r rserve \
  && useradd -g rserve --create-home --shell /bin/bash rserve
 
-RUN chown rserve:rserve . && \
-   chmod +x -R /runservice-rserve.sh
+RUN chown rserve:rserve runservice-rserve.sh && \
+   chmod +x -R runservice-rserve.sh
 
 EXPOSE 6311/tcp
 USER rserve
