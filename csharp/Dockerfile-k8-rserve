@@ -10,6 +10,8 @@ RUN apt-get update \
 ADD https://www.rforge.net/Rserve/snapshot/Rserve_1.8-6.tar.gz .
 RUN R CMD INSTALL Rserve_1.8-6.tar.gz
 
+COPY runservice-rserve.sh runservice-rserve.sh
+
 EXPOSE 6311/tcp
 
-ENTRYPOINT R CMD Rserve --vanilla
+ENTRYPOINT runservice-rserve.sh
