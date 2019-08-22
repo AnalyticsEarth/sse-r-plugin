@@ -8,6 +8,22 @@ if [ $status -ne 0 ]; then
   exit $status
 fi
 
+# Start the first process
+R CMD Rserve --vanilla --RS-port 6312
+status=$?
+if [ $status -ne 0 ]; then
+  echo "Failed to start Rserve: $status"
+  exit $status
+fi
+
+# Start the first process
+R CMD Rserve --vanilla --RS-port 6313
+status=$?
+if [ $status -ne 0 ]; then
+  echo "Failed to start Rserve: $status"
+  exit $status
+fi
+
 # Start the second process
 dotnet ./SSEtoRServeCore.dll -D
 status=$?
@@ -34,4 +50,3 @@ while sleep 60; do
     exit 1
   fi
 done
-
