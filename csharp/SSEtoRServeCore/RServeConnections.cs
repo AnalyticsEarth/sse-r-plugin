@@ -18,6 +18,28 @@
     using System.Net.NetworkInformation;
     #endregion
 
+    public class PoolNode
+    {
+        static int poolcounter;
+        public int Connections { get; private set; }
+        public RserveParameter rserveParameter { get; private set; }
+
+        public PoolNode(string address, int port, RserveParameter masterparams, int connections)
+        {
+            rserveParameter = new RserveParameter(new Uri($"rserve://{address}:{port}"), port, masterparams.InitScript, masterparams.RProcessCommandLineArgs, masterparams.User, masterparams.Password);
+            poolcounter = 0;
+            Connections = connections;
+        }
+
+        public int getNextConnectionNumber()
+        {
+
+            Interlocked.Increment(ref poolcounter);
+            int poolid = poolcounter % (Connections);
+            return poolid;
+        }
+    }
+
     public class RserveParameter
     {
         #region Properties & Variables
@@ -33,6 +55,7 @@
         public string User { get; private set; }
         public string Password { get; private set; }
         public int PoolLimit { get; private set; }
+        public List<PoolNode> PoolNodes { get; private set; }
         public NetworkCredential Credentials { get; private set; }
 
         public bool RTermPathExits
@@ -45,7 +68,8 @@
         #endregion
 
         #region Constructor
-        public RserveParameter(Uri uri, int rservePort, string initScript = null, string rProcessCommandLineArgs = null, string rserveUser = null, string rservePassword = null, int rservePoolLimit = 1)
+
+        public RserveParameter(Uri uri, int rservePort, string initScript = null, string rProcessCommandLineArgs = null, string rserveUser = null, string rservePassword = null)
         {
             ConnUri = uri;
             Port = rservePort;
@@ -53,8 +77,46 @@
             RProcessCommandLineArgs = rProcessCommandLineArgs;
             User = rserveUser;
             Password = rservePassword;
-            PoolLimit = rservePoolLimit;
+
             Init();
+        }
+
+        public RserveParameter(string initScript = null, string rProcessCommandLineArgs = null, string rserveUser = null, string rservePassword = null, string rservePoolNodes = "")
+        {
+            InitScript = initScript;
+            RProcessCommandLineArgs = rProcessCommandLineArgs;
+            User = rserveUser;
+            Password = rservePassword;
+            if(rservePoolNodes.Length > 0)
+            {
+                PoolNodes = new List<PoolNode>();
+                ParsePoolNodes(rservePoolNodes);
+
+            }
+
+            //Init();
+        }
+
+        private void ParsePoolNodes(string config)
+        {
+            if(config.Length > 0)
+            {
+                String[] items = config.Split(';');
+                foreach(String item in items)
+                {
+                    String[] parts = item.Split(':');
+                    int cons = 1;
+                    if (parts.Length == 3) {
+                        Int32.TryParse(parts[2], out cons);
+                    }
+                    PoolNodes.Add(new PoolNode(parts[0], Convert.ToInt32(parts[1]), this , cons));
+                }
+                foreach(PoolNode node in PoolNodes)
+                {
+                    Console.WriteLine($"Node - {node.rserveParameter.Hostname}:{node.rserveParameter.Port} - {node.Connections}");
+                }
+            }
+
         }
         
         private void Init()
@@ -112,10 +174,14 @@
 
     public class RserveConnectionPool : IDisposable
     {
+        #region Logger
+        private static Logger logger = LogManager.GetCurrentClassLogger();
+        #endregion
+
         #region Proberties & Variables
         private ConcurrentDictionary<string, RserveConnection> rserveConns;
         private ConcurrentDictionary<string, DateTime> lastUsed;
-        private Random rnd;
+        
         static int poolcounter;
         #endregion
 
@@ -124,7 +190,7 @@
         {
             rserveConns = new ConcurrentDictionary<string, RserveConnection>();
             lastUsed = new ConcurrentDictionary<string, DateTime>();
-            rnd = new Random();
+           
             poolcounter = 0;
 
             // TODO: Maybe add a cleanup of old connections that are not used
@@ -136,12 +202,12 @@
         {
 
             Interlocked.Increment(ref poolcounter);
-            int poolid = poolcounter % (rserveParams.PoolLimit + 1);
-            
-            //int poolid = rnd.Next(rserveParams.PoolLimit);
+            int poolnodeindex = poolcounter % (rserveParams.PoolNodes.Count);
 
-            var hash = $"{rserveParams.GetHashCode().ToString()}-{poolid.ToString()}";
-            Console.WriteLine($"Connecting to pool {poolid} with hash: {hash}");
+            PoolNode node = rserveParams.PoolNodes.ElementAt(poolnodeindex);
+
+            var hash = $"{node.rserveParameter.GetHashCode().ToString()}-{node.getNextConnectionNumber().ToString()}";
+            logger.Info($"Connecting to node {poolnodeindex} with hash: {hash}");
             RserveConnection conn = null;
 
 
@@ -157,7 +223,7 @@
             }
             else
             {
-                conn = new RserveConnection(rserveParams);
+                conn = new RserveConnection(node.rserveParameter);
                 Thread.Sleep(500);
                 rserveConns.TryAdd(hash, conn);
                 lastUsed.TryAdd(hash, DateTime.Now);

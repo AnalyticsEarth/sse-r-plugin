@@ -28,11 +28,9 @@ namespace SSEtoRserve
                 //Convert.ToString(Configuration["grpcHost"] ?? "localhost");
                 var grpcHost = ParameterValue("grpcHost", "localhost");
                 int grpcPort = Convert.ToInt32(ParameterValue("grpcPort", "50051"));
-                var rserveHost = IPAddress.Parse(ParameterValue("rserveHost", "127.0.0.1"));
-                int rservePort = Convert.ToInt32(ParameterValue("rservePort", "6311"));
                 var rserveUser = Convert.ToString(ParameterValue("rserveUser", ""));
                 var rservePassword = Convert.ToString(ParameterValue("rservePassword",""));
-                int rservePoolLimit = Convert.ToInt32(ParameterValue("rservePoolLimit", "1"));
+                var rservePoolNodes = Convert.ToString(ParameterValue("rservePoolNodes", ""));
 
                 string rProcessPath;
 
@@ -81,10 +79,8 @@ namespace SSEtoRserve
                     logger.Info("No certificates defined. Opening insecure channel.");
                 }
 
-                var uri = new Uri($"rserve://{rserveHost}:{rservePort}");
-                if (!String.IsNullOrEmpty(rProcessPath))
-                    uri = new Uri(rProcessPath);
-                var parameter = new RserveParameter(uri, rservePort, rserveInitScript, rProcessCommandLineArgs, rserveUser, rservePassword, rservePoolLimit);
+                
+                var parameter = new RserveParameter(rserveInitScript, rProcessCommandLineArgs, rserveUser, rservePassword, rservePoolNodes);
 
                 using (var rServeEvaluator = new RServeEvaluator(parameter, allowScript, functionDefinitionsFile))
                 {
@@ -115,7 +111,7 @@ namespace SSEtoRserve
             {
                 logger.Error($"Error in main entry point of SSEtoRserve: {ex}");
                 Console.WriteLine(ex);
-                //Console.ReadKey();
+                Console.ReadKey();
 
             }
         }

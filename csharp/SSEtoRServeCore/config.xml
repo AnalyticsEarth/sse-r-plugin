@@ -2,11 +2,10 @@
   <grpcPort>50051</grpcPort>
   <!-- grpcHost: Set to 0.0.0.0 to make it reachable from the outside world -->
   <grpcHost>0.0.0.0</grpcHost>
-  <rserveHost>127.0.0.1</rserveHost>
-  <rservePort>6311</rservePort>
   <rserveUser></rserveUser>
   <rservePassword></rservePassword>
-  <rservePoolLimit>1</rservePoolLimit>
+  <!-- Nodes Delimited by ; with <HOST>:<PORT>:<CONNECTIONS> - Connections must be set to 1 for use on windows-->
+  <rservePoolNodes>127.0.0.1:6311:1</rservePoolNodes>
   <!-- certificateFolderFullPath: Set to i.e. C:\sse_qliktest_server_certs to enable mutual authentication (server and client auth) between this plugin and Qlik -->
   <certificateFolderFullPath></certificateFolderFullPath>
   <!-- rProcessPathToStart: Set to i.e. C:\Program Files\Microsoft\R Open\bin\x64\Rterm.exe if SSEtoRserve should start an R process as well -->

@@ -55,8 +55,8 @@ namespace SSEtoRserve
         {
             try
             {
-                var identifier = $"Qlik SSEtoRserve plugin";
-                var version = $"v1.2.1";
+                var identifier = $"Qlik SSEtoRserve plugin - Multi Node and Multi Connection Support";
+                var version = $"v2.0.0";
                 string registeredFunctionsString = $"No functions defined";
 
                 capabilities = new Capabilities
