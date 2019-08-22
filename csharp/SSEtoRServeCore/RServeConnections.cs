@@ -20,7 +20,7 @@
 
     public class PoolNode
     {
-        static int poolcounter;
+        private int poolcounter;
         public int Connections { get; private set; }
         public RserveParameter rserveParameter { get; private set; }
 
