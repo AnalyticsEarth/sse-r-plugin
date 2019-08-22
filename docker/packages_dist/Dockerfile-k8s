@@ -7,4 +7,4 @@ RUN apt-get update \
   && apt-get clean \
   && Rscript "/root/installpackages.r" \
   && rm -rf /tmp/*
-USER sse2rserve
+USER rserve
