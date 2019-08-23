@@ -82,6 +82,9 @@ namespace SSEtoRserve
                 
                 var parameter = new RserveParameter(rserveInitScript, rProcessCommandLineArgs, rserveUser, rservePassword, rservePoolNodes);
 
+                GrpcEnvironment.SetThreadPoolSize(10);
+                GrpcEnvironment.SetCompletionQueueCount(10);
+
                 using (var rServeEvaluator = new RServeEvaluator(parameter, allowScript, functionDefinitionsFile))
                 {
                     var server = new Server
@@ -89,6 +92,7 @@ namespace SSEtoRserve
                         Services = { Connector.BindService(rServeEvaluator) },
                         Ports = { new ServerPort(grpcHost, grpcPort, sslCredentials) }
                     };
+                    server.RequestCallTokensPerCompletionQueue = 10000;
 
                     server.Start();
                     //Console.WriteLine("Press any key to stop SSEtoRserve...");
