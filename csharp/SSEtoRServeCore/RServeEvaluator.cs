@@ -15,7 +15,7 @@ namespace SSEtoRserve
 {
     class RServeEvaluator : ConnectorBase, IDisposable
     {
-        private static SemaphoreSlim semaphoreRserve = new SemaphoreSlim(1, 1);
+        private static SemaphoreSlim semaphoreRserve = new SemaphoreSlim(1, 30);
         private static Logger logger = LogManager.GetCurrentClassLogger();
 
         public class ParameterData
