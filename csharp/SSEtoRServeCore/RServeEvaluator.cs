@@ -232,7 +232,7 @@ namespace SSEtoRserve
             stopwatch.Start();
             await rserveConn.semaphoreRserve.WaitAsync();
             stopwatch.Stop();
-            logger.Info($"Waited for Connection: {stopwatch.ElapsedMilliseconds} ms");
+            logger.Info($"Wait For Connection Took {stopwatch.ElapsedMilliseconds} ms, hashid ({reqHash})");
             try
             {
                 if (inputDataFrame != null && inputDataFrame.Count > 0)
