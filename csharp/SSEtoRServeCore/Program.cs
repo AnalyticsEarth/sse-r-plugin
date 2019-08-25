@@ -82,8 +82,8 @@ namespace SSEtoRserve
                 
                 var parameter = new RserveParameter(rserveInitScript, rProcessCommandLineArgs, rserveUser, rservePassword, rservePoolNodes);
 
-                GrpcEnvironment.SetThreadPoolSize(100);
-                GrpcEnvironment.SetCompletionQueueCount(100);
+                //GrpcEnvironment.SetThreadPoolSize(100);
+                //GrpcEnvironment.SetCompletionQueueCount(100);
 
                 using (var rServeEvaluator = new RServeEvaluator(parameter, allowScript, functionDefinitionsFile))
                 {

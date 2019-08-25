@@ -15,7 +15,7 @@ namespace SSEtoRserve
 {
     class RServeEvaluator : ConnectorBase, IDisposable
     {
-        private static SemaphoreSlim semaphoreRserve = new SemaphoreSlim(1, 30);
+        //private static SemaphoreSlim semaphoreRserve = new SemaphoreSlim(1, 30);
         private static Logger logger = LogManager.GetCurrentClassLogger();
 
         public class ParameterData
@@ -228,7 +228,7 @@ namespace SSEtoRserve
 
         async Task<Sexp> EvaluateScriptInRserve(SexpList inputDataFrame, int reqHash, string rScript, RserveConnection rserveConn)
         {
-            await semaphoreRserve.WaitAsync();
+            await rserveConn.semaphoreRserve.WaitAsync();
             try
             {
                 if (inputDataFrame != null && inputDataFrame.Count > 0)
@@ -253,7 +253,7 @@ namespace SSEtoRserve
             }
             finally
             {
-                semaphoreRserve.Release();
+                rserveConn.semaphoreRserve.Release();
             }
         }
 
@@ -334,6 +334,9 @@ namespace SSEtoRserve
             RserveConnection rserveConn;
             int reqHash = requestStream.GetHashCode();
 
+            var stopwatch = new Stopwatch();
+            stopwatch.Start();
+
             if (!(capabilities.AllowScript))
             {
                 throw new RpcException(new Status(StatusCode.PermissionDenied, $"Script evaluations disabled"));
@@ -342,13 +345,13 @@ namespace SSEtoRserve
             try
             {
                 rserveConn = connPool.GetConnection(rservePara);
-
+                logger.Info($"Get Connection Took {stopwatch.ElapsedMilliseconds} ms, hashid ({reqHash})");
                 var header = GetHeader(context.RequestHeaders, "qlik-scriptrequestheader-bin");
                 scriptHeader = ScriptRequestHeader.Parser.ParseFrom(header);
 
                 var commonRequestHeader = GetHeader(context.RequestHeaders, "qlik-commonrequestheader-bin");
                 commonHeader = CommonRequestHeader.Parser.ParseFrom(commonRequestHeader);
-
+                logger.Info($"Get Headers Took {stopwatch.ElapsedMilliseconds} ms, hashid ({reqHash})");
                 logger.Info($"EvaluateScript called from client ({context.Peer}), hashid ({reqHash})");
                 logger.Debug($"EvaluateScript header info: AppId ({commonHeader.AppId}), UserId ({commonHeader.UserId}), Cardinality ({commonHeader.Cardinality} rows)");
             }
@@ -360,8 +363,7 @@ namespace SSEtoRserve
 
             try
             {
-                var stopwatch = new Stopwatch();
-                stopwatch.Start();
+                
 
                 var paramnames = $"EvaluateScript call with hashid({reqHash}) got Param names: ";
 
@@ -370,6 +372,7 @@ namespace SSEtoRserve
                     paramnames += $" {param.Name}";
                 }
                 logger.Info("{0}", paramnames);
+                logger.Info($"Get Params Took {stopwatch.ElapsedMilliseconds} ms, hashid ({reqHash})");
 
                 SexpList inputDataFrame = null;
 
@@ -377,12 +380,15 @@ namespace SSEtoRserve
                 {
                     inputDataFrame = await AddInputData(scriptHeader.Params.ToArray(), requestStream);
                 }
+                logger.Info($"Add Input Data Took {stopwatch.ElapsedMilliseconds} ms, hashid ({reqHash})");
 
                 var rResult = await EvaluateScriptInRserve(inputDataFrame, reqHash, scriptHeader.Script.Replace("\r", " "), rserveConn);
+                logger.Info($"Eval Script Took {stopwatch.ElapsedMilliseconds} ms, hashid ({reqHash})");
 
                 // Disable caching (uncomment line below and comment next line if you do not want the results sent to Qlik to be cached in Qlik)
                 //await GenerateResult(rResult, responseStream, context, cacheResultInQlik: false);
                 await GenerateResult(rResult, responseStream, context);
+                
                 stopwatch.Stop();
                 logger.Info($"Took {stopwatch.ElapsedMilliseconds} ms, hashid ({reqHash})");
             }

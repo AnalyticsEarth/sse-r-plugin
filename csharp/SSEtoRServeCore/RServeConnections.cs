@@ -261,6 +261,8 @@
         private Process RtermProcess { get; set; }
         private StringBuilder ProcessLog { get; set; } = new StringBuilder();
         private RserveParameter Parameter { get; set; }
+
+        public SemaphoreSlim semaphoreRserve = new SemaphoreSlim(1, 1);
         #endregion
 
         #region Constructor & Dispose
