@@ -228,7 +228,11 @@ namespace SSEtoRserve
 
         async Task<Sexp> EvaluateScriptInRserve(SexpList inputDataFrame, int reqHash, string rScript, RserveConnection rserveConn)
         {
+            var stopwatch = new Stopwatch();
+            stopwatch.Start();
             await rserveConn.semaphoreRserve.WaitAsync();
+            stopwatch.Stop();
+            logger.Info($"Waited for Connection: {stopwatch.ElapsedMilliseconds} ms");
             try
             {
                 if (inputDataFrame != null && inputDataFrame.Count > 0)
