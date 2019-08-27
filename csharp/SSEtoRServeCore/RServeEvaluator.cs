@@ -232,7 +232,7 @@ namespace SSEtoRserve
             stopwatch.Start();
             await rserveConn.semaphoreRserve.WaitAsync();
             stopwatch.Stop();
-            logger.Info($"Wait For Connection Took {stopwatch.ElapsedMilliseconds} ms, hashid ({reqHash})");
+            logger.Trace($"Wait For Connection Took {stopwatch.ElapsedMilliseconds} ms, hashid ({reqHash})");
             try
             {
                 if (inputDataFrame != null && inputDataFrame.Count > 0)
@@ -376,7 +376,7 @@ namespace SSEtoRserve
                     paramnames += $" {param.Name}";
                 }
                 logger.Info("{0}", paramnames);
-                logger.Info($"Get Params Took {stopwatch.ElapsedMilliseconds} ms, hashid ({reqHash})");
+                
 
                 SexpList inputDataFrame = null;
 
@@ -384,10 +384,10 @@ namespace SSEtoRserve
                 {
                     inputDataFrame = await AddInputData(scriptHeader.Params.ToArray(), requestStream);
                 }
-                logger.Info($"Add Input Data Took {stopwatch.ElapsedMilliseconds} ms, hashid ({reqHash})");
+                logger.Trace($"Add Input Data Took {stopwatch.ElapsedMilliseconds} ms, hashid ({reqHash})");
 
                 var rResult = await EvaluateScriptInRserve(inputDataFrame, reqHash, scriptHeader.Script.Replace("\r", " "), rserveConn);
-                logger.Info($"Eval Script Took {stopwatch.ElapsedMilliseconds} ms, hashid ({reqHash})");
+                logger.Trace($"Eval Script Took {stopwatch.ElapsedMilliseconds} ms, hashid ({reqHash})");
 
                 // Disable caching (uncomment line below and comment next line if you do not want the results sent to Qlik to be cached in Qlik)
                 //await GenerateResult(rResult, responseStream, context, cacheResultInQlik: false);
