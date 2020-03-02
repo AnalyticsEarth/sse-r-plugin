@@ -1,9 +1,9 @@
-FROM microsoft/dotnet:2.1.403-sdk as builder
+FROM microsoft/dotnet/sdk:3.1 as builder
 
 LABEL author="AnalyticsEarth"
 
 # Details
-LABEL version="1.1.0"
+LABEL version="2.0.0"
 LABEL description="SSEtoRserve on dotnetcore with self spawning R instance"
 
 RUN mkdir -p /root/src/app/sse2rserve
@@ -15,7 +15,7 @@ RUN dotnet restore SSEtoRServeCore/SSEtoRServeCore.csproj
 COPY SSEtoRServeCore/ .
 RUN dotnet publish -c release -r linux-x64 -o published
 
-FROM microsoft/dotnet:2.1.5-runtime
+FROM microsoft/dotnet/runtime:3.1
 
 RUN groupadd -r sse2rserve \
  && useradd -g sse2rserve --create-home --shell /bin/bash sse2rserve

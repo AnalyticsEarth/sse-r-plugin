@@ -1,4 +1,4 @@
-FROM microsoft/dotnet:2.1.5-runtime AS dotnet_r_base
+FROM microsoft/dotnet/runtime:3.1 AS dotnet_r_base
 
 RUN apt-get update \
   && apt-get upgrade -y \
@@ -8,12 +8,12 @@ RUN apt-get update \
 ADD https://www.rforge.net/Rserve/snapshot/Rserve_1.8-6.tar.gz .
 RUN R CMD INSTALL Rserve_1.8-6.tar.gz
 
-FROM microsoft/dotnet:2.1.403-sdk as builder
+FROM microsoft/dotnet/sdk:3.1 as builder
 
 LABEL author="AnalyticsEarth"
 
 # Details
-LABEL version="1.1.0"
+LABEL version="2.0.0"
 LABEL description="SSEtoRserve on dotnetcore with self spawning R instance"
 
 RUN mkdir -p /root/src/app/sse2rserve
