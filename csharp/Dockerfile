@@ -1,4 +1,4 @@
-FROM microsoft/dotnet/core/runtime:3.1 AS dotnet_r_base
+FROM mcr.microsoft.com/dotnet/core/runtime:3.1 AS dotnet_r_base
 
 RUN apt-get update \
   && apt-get upgrade -y \
@@ -8,7 +8,7 @@ RUN apt-get update \
 ADD https://www.rforge.net/Rserve/snapshot/Rserve_1.8-6.tar.gz .
 RUN R CMD INSTALL Rserve_1.8-6.tar.gz
 
-FROM microsoft/dotnet/core/sdk:3.1 as builder
+FROM mcr.microsoft.com/dotnet/core/sdk:3.1 as builder
 
 LABEL author="AnalyticsEarth"
 

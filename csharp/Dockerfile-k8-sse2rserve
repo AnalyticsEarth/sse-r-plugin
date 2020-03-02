@@ -1,4 +1,4 @@
-FROM microsoft/dotnet/core/sdk:3.1 as builder
+FROM mcr.microsoft.com/dotnet/core/sdk:3.1 as builder
 
 LABEL author="AnalyticsEarth"
 
@@ -15,7 +15,7 @@ RUN dotnet restore SSEtoRServeCore/SSEtoRServeCore.csproj
 COPY SSEtoRServeCore/ .
 RUN dotnet publish -c release -r linux-x64 -o published
 
-FROM microsoft/dotnet/core/runtime:3.1
+FROM mcr.microsoft.com/dotnet/core/runtime:3.1
 
 RUN groupadd -r sse2rserve \
  && useradd -g sse2rserve --create-home --shell /bin/bash sse2rserve
